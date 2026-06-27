@@ -1,40 +1,6 @@
-# Cenário 1 - Clínica Veterinária
+# Cenário 1 - Sistema de Clínica Veterinária
 
-## Entidades
-
-### Tutor
-
-* id
-* nome
-* endereco
-* telefone
-
-### Animal
-
-* id
-* nome
-* especie
-* raca
-* tutor_id
-
-### Consulta
-
-* id
-* animal_id
-* data
-* motivo
-* valor
-
-## Regras de Negócio
-
-1. Um tutor pode possuir vários animais.
-2. Um animal pertence a um único tutor.
-3. Não é permitido registrar consulta para um animal não cadastrado.
-4. O valor da consulta não pode ser negativo.
-5. O sistema deve permitir consultar o histórico de consultas de um animal.
-6. O sistema deve permitir visualizar todos os animais de um tutor.
-
-## CREATE TABLE
+## Tabelas
 
 ### Tutor
 
@@ -53,9 +19,9 @@ CREATE TABLE tutor (
 CREATE TABLE animal (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    especie VARCHAR(50) NOT NULL,
+    especie VARCHAR(100) NOT NULL,
     raca VARCHAR(100) NOT NULL,
-    tutor_id INT NOT NULL,
+    tutor_id INTEGER NOT NULL,
     FOREIGN KEY (tutor_id) REFERENCES tutor(id)
 );
 ```
@@ -65,10 +31,24 @@ CREATE TABLE animal (
 ```sql
 CREATE TABLE consulta (
     id SERIAL PRIMARY KEY,
+    animal_id INTEGER NOT NULL,
     data DATE NOT NULL,
-    motivo VARCHAR(200) NOT NULL,
-    animal_id INT NOT NULL,
-    valor NUMERIC(10,2) NOT NULL,
+    motivo VARCHAR(255) NOT NULL,
+    valor DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (animal_id) REFERENCES animal(id)
 );
 ```
+
+## Regras de Negócio
+
+* Cadastrar tutores com nome, endereço e telefone.
+* Um tutor pode ter um ou mais animais cadastrados.
+* Todo animal deve estar vinculado a um tutor.
+* Cadastrar animais com nome, espécie e raça.
+* Registrar consultas para animais cadastrados.
+* Cada consulta deve informar o animal, a data, o motivo e o valor.
+* Não é permitido registrar consulta para um animal que não esteja cadastrado.
+* O valor da consulta não pode ser negativo.
+* O sistema deve permitir consultar o histórico de consultas de um animal.
+* O sistema deve permitir consultar todos os animais de um tutor.
+* O fluxo do sistema deve seguir a ordem: Tutor → Animal → Consulta.
